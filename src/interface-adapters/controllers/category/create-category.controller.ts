@@ -1,4 +1,5 @@
 import { CreateCategoryUseCase } from "@/application/use-cases/category/create-category.use-case";
+import { InputParseError } from "@/entities/errors/parse.error";
 import { Category, CreateCategory } from "@/entities/models/category.model";
 import { z } from "zod";
 
@@ -21,7 +22,7 @@ export class CreateCategoryController {
     const { data, error: inputParseError } = inputSchema.safeParse(input);
 
     if (inputParseError) {
-      throw new Error("Invalid data");
+      throw new InputParseError("Invalid data", { cause: inputParseError });
     }
 
     const category = await this.createCategoryUseCase.run(data);
