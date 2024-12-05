@@ -9,17 +9,28 @@ const createCategoryController = new CreateCategoryController(
   createCategoryUseCase,
 );
 
-export class CategoryRoute {
-  static async create(req: Request, res: Response) {
-    try {
-      const input = req.body;
-
-      const category = await createCategoryController.run(input);
-
-      res.status(200).json(category);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Internal server error" });
-    }
+export const getAllCategories = async (_req: Request, res: Response) => {
+  try {
+    res.status(200).json({ message: "CATEGORIES HERE" });
+  } catch (err) {
+    console.error("====> ERROR FROM API", err);
+    res
+      .status(500)
+      .json({ message: "Internal server error while fetching categories" });
   }
-}
+};
+
+export const createCategory = async (req: Request, res: Response) => {
+  try {
+    const input = req.body;
+
+    const category = await createCategoryController.run(input);
+
+    res.status(200).json(category);
+  } catch (err) {
+    console.error("====> ERROR FROM API", err);
+    res
+      .status(500)
+      .json({ message: "Internal server error while creating category" });
+  }
+};

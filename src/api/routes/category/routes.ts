@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { CategoryRoute } from "./category.route";
+import { createCategory, getAllCategories } from "./category.route";
 
 export const categoryRouter = Router();
 
-categoryRouter.post("/", CategoryRoute.create);
+categoryRouter.get("/", getAllCategories);
+categoryRouter.post("/", createCategory);
