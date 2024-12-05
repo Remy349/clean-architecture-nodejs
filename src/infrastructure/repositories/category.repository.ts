@@ -1,5 +1,6 @@
 import { ICategoryRepository } from "@/application/repositories/category.repository.interface";
 import PrismaSingleton from "@/db/prisma";
+import { DBConflictError } from "@/entities/errors/database.error";
 import { CreateCategory, Category } from "@/entities/models/category.model";
 import { PrismaClient } from "@prisma/client";
 
@@ -19,7 +20,7 @@ export class CategoryRepository implements ICategoryRepository {
       });
 
       if (categoryByName) {
-        throw new Error("Category already created");
+        throw new DBConflictError("Category already created");
       }
 
       const newCategory = await this.db.category.create({
@@ -28,8 +29,8 @@ export class CategoryRepository implements ICategoryRepository {
 
       return newCategory;
     } catch (err) {
-      console.error(err);
-      throw new Error("Internal server error while creating category");
+      console.error("====> ERROR FROM REPOSITORY", err);
+      throw err;
     }
   }
 }
