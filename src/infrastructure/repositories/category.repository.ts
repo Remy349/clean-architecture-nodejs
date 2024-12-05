@@ -11,6 +11,17 @@ export class CategoryRepository implements ICategoryRepository {
     this.db = PrismaSingleton.getInstance();
   }
 
+  async getAll(): Promise<Category[]> {
+    try {
+      const categories = await this.db.category.findMany();
+
+      return categories;
+    } catch (err) {
+      console.error("====> ERROR FROM REPOSITORY", err);
+      throw err;
+    }
+  }
+
   async create(data: CreateCategory): Promise<Category> {
     try {
       const categoryByName = await this.db.category.findFirst({

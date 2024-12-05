@@ -1,17 +1,27 @@
 import { CreateCategoryUseCase } from "@/application/use-cases/category/create-category.use-case";
+import { GetAllCategoriesUseCase } from "@/application/use-cases/category/get-all-categories.use-case";
 import { CategoryRepository } from "@/infrastructure/repositories/category.repository";
 import { CreateCategoryController } from "@/interface-adapters/controllers/category/create-category.controller";
+import { GetAllCategoriesController } from "@/interface-adapters/controllers/category/get-all-categories.controller";
 import { Request, Response } from "express";
 
 const categoryRepository = new CategoryRepository();
+
+const getAllCategoriesUseCase = new GetAllCategoriesUseCase(categoryRepository);
 const createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
+
+const getAllCategoriesController = new GetAllCategoriesController(
+  getAllCategoriesUseCase,
+);
 const createCategoryController = new CreateCategoryController(
   createCategoryUseCase,
 );
 
 export const getAllCategories = async (_req: Request, res: Response) => {
   try {
-    res.status(200).json({ message: "CATEGORIES HERE" });
+    const categories = await getAllCategoriesController.run();
+
+    res.status(200).json(categories);
   } catch (err) {
     console.error("====> ERROR FROM API", err);
     res
