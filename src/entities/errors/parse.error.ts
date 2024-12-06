@@ -1,5 +1,7 @@
-export class InputParseError extends Error {
+import { ApiError } from "./api.error";
+
+export class InputParseError extends ApiError {
   constructor(message: string, options?: ErrorOptions) {
-    super(message, options);
+    super(message, 400, options);
   }
 }
