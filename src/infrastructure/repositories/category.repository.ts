@@ -1,6 +1,10 @@
 import { ICategoryRepository } from "@/application/repositories/category.repository.interface";
 import PrismaSingleton from "@/db/prisma";
-import { DBConflictError } from "@/entities/errors/database.error";
+import { ApiError } from "@/entities/errors/api.error";
+import {
+  DBConflictError,
+  DBInternalServerError,
+} from "@/entities/errors/database.error";
 import { CreateCategory, Category } from "@/entities/models/category.model";
 import { PrismaClient } from "@prisma/client";
 
@@ -17,8 +21,10 @@ export class CategoryRepository implements ICategoryRepository {
 
       return categories;
     } catch (err) {
-      console.error("====> ERROR FROM REPOSITORY", err);
-      throw err;
+      console.error("===> ERROR FROM REPOSITORY IMPL: ", err);
+      throw new DBInternalServerError(
+        "Internal server error while fetching categories",
+      );
     }
   }
 
@@ -40,8 +46,15 @@ export class CategoryRepository implements ICategoryRepository {
 
       return newCategory;
     } catch (err) {
-      console.error("====> ERROR FROM REPOSITORY", err);
-      throw err;
+      console.error("===> ERROR FROM REPOSITORY IMPL: ", err);
+
+      if (err instanceof ApiError) {
+        throw err;
+      }
+
+      throw new DBInternalServerError(
+        "Internal server error while creating category",
+      );
     }
   }
 }
