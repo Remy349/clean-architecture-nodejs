@@ -3,7 +3,7 @@ import { GetAllCategoriesUseCase } from "@/application/use-cases/category/get-al
 import { CategoryRepository } from "@/infrastructure/repositories/category.repository";
 import { CreateCategoryController } from "@/interface-adapters/controllers/category/create-category.controller";
 import { GetAllCategoriesController } from "@/interface-adapters/controllers/category/get-all-categories.controller";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 const categoryRepository = new CategoryRepository();
 
@@ -17,30 +17,32 @@ const createCategoryController = new CreateCategoryController(
   createCategoryUseCase,
 );
 
-export const getAllCategories = async (_req: Request, res: Response) => {
+export const getAllCategories = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const categories = await getAllCategoriesController.run();
 
     res.status(200).json(categories);
   } catch (err) {
-    console.error("====> ERROR FROM API", err);
-    res
-      .status(500)
-      .json({ message: "Internal server error while fetching categories" });
+    next(err);
   }
 };
 
-export const createCategory = async (req: Request, res: Response) => {
+export const createCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const input = req.body;
 
     const category = await createCategoryController.run(input);
 
-    res.status(200).json(category);
+    res.status(201).json(category);
   } catch (err) {
-    console.error("====> ERROR FROM API", err);
-    res
-      .status(500)
-      .json({ message: "Internal server error while creating category" });
+    next(err);
   }
 };
