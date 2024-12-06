@@ -21,7 +21,7 @@ export class CategoryRepository implements ICategoryRepository {
 
       return categories;
     } catch (err) {
-      console.error("===> ERROR FROM REPOSITORY IMPL: ", err);
+      console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
       throw new DBInternalServerError(
         "Internal server error while fetching categories",
       );
@@ -46,7 +46,7 @@ export class CategoryRepository implements ICategoryRepository {
 
       return newCategory;
     } catch (err) {
-      console.error("===> ERROR FROM REPOSITORY IMPL: ", err);
+      console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
 
       if (err instanceof ApiError) {
         throw err;
