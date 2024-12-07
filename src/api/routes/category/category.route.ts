@@ -1,21 +1,5 @@
-import { CreateCategoryUseCase } from "@/application/use-cases/category/create-category.use-case";
-import { GetAllCategoriesUseCase } from "@/application/use-cases/category/get-all-categories.use-case";
-import { CategoryRepository } from "@/infrastructure/repositories/category.repository";
-import { CreateCategoryController } from "@/interface-adapters/controllers/category/create-category.controller";
-import { GetAllCategoriesController } from "@/interface-adapters/controllers/category/get-all-categories.controller";
+import { getInjection } from "@/di/container";
 import { NextFunction, Request, Response } from "express";
-
-const categoryRepository = new CategoryRepository();
-
-const getAllCategoriesUseCase = new GetAllCategoriesUseCase(categoryRepository);
-const createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
-
-const getAllCategoriesController = new GetAllCategoriesController(
-  getAllCategoriesUseCase,
-);
-const createCategoryController = new CreateCategoryController(
-  createCategoryUseCase,
-);
 
 export const getAllCategories = async (
   _req: Request,
@@ -23,7 +7,10 @@ export const getAllCategories = async (
   next: NextFunction,
 ) => {
   try {
-    const categories = await getAllCategoriesController.run();
+    const getAllCategoriesController = getInjection(
+      "IGetAllCategoriesController",
+    );
+    const categories = await getAllCategoriesController();
 
     res.status(200).json(categories);
   } catch (err) {
@@ -39,7 +26,8 @@ export const createCategory = async (
   try {
     const input = req.body;
 
-    const category = await createCategoryController.run(input);
+    const createCategoryController = getInjection("ICreateCategoryController");
+    const category = await createCategoryController(input);
 
     res.status(201).json(category);
   } catch (err) {
