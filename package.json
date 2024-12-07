@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@evyweb/ioctopus": "^1.1.0",
     "@prisma/client": "^6.0.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.1",

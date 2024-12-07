@@ -1,4 +1,4 @@
-import { CreateCategoryUseCase } from "@/application/use-cases/category/create-category.use-case";
+import { ICreateCategoryUseCase } from "@/application/use-cases/category/create-category.use-case";
 import { InputParseError } from "@/entities/errors/parse.error";
 import { Category, CreateCategory } from "@/entities/models/category.model";
 import { z } from "zod";
@@ -15,18 +15,20 @@ const inputSchema = z.object({
   name: z.string().min(1),
 });
 
-export class CreateCategoryController {
-  constructor(private createCategoryUseCase: CreateCategoryUseCase) {}
+export type ICreateCategoryController = ReturnType<
+  typeof createCategoryController
+>;
 
-  async run(input: CreateCategory): Promise<ReturnType<typeof presenter>> {
+export const createCategoryController =
+  (createCategoryUseCase: ICreateCategoryUseCase) =>
+  async (input: CreateCategory): Promise<ReturnType<typeof presenter>> => {
     const { data, error: inputParseError } = inputSchema.safeParse(input);
 
     if (inputParseError) {
       throw new InputParseError("Invalid data", { cause: inputParseError });
     }
 
-    const category = await this.createCategoryUseCase.run(data);
+    const category = await createCategoryUseCase(data);
 
     return presenter(category);
-  }
-}
+  };

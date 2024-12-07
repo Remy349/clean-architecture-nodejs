@@ -1,4 +1,4 @@
-import { GetAllCategoriesUseCase } from "@/application/use-cases/category/get-all-categories.use-case";
+import { IGetAllCategoriesUseCase } from "@/application/use-cases/category/get-all-categories.use-case";
 import { Category } from "@/entities/models/category.model";
 
 const presenter = (categories: Category[]) => {
@@ -9,12 +9,14 @@ const presenter = (categories: Category[]) => {
   }));
 };
 
-export class GetAllCategoriesController {
-  constructor(private getAllCategoriesUseCase: GetAllCategoriesUseCase) {}
+export type IGetAllCategoriesController = ReturnType<
+  typeof getAllCategoriesController
+>;
 
-  async run(): Promise<ReturnType<typeof presenter>> {
-    const categories = await this.getAllCategoriesUseCase.run();
+export const getAllCategoriesController =
+  (getAllCategoriesUseCase: IGetAllCategoriesUseCase) =>
+  async (): Promise<ReturnType<typeof presenter>> => {
+    const categories = await getAllCategoriesUseCase();
 
     return presenter(categories);
-  }
-}
+  };
