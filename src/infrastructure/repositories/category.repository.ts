@@ -4,7 +4,6 @@ import { ApiError } from "@/entities/errors/api.error";
 import {
   DBConflictError,
   DBInternalServerError,
-  DBNotFoundError,
 } from "@/entities/errors/database.error";
 import { CreateCategory, Category } from "@/entities/models/category.model";
 import { PrismaClient } from "@prisma/client";
@@ -76,22 +75,11 @@ export class CategoryRepository implements ICategoryRepository {
 
   async delete(categoryId: number): Promise<void> {
     try {
-      const category = await this.getById(categoryId);
-
-      if (!category) {
-        throw new DBNotFoundError("Category not found");
-      }
-
       await this.db.category.delete({
         where: { id: categoryId },
       });
     } catch (err) {
       console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
-
-      if (err instanceof ApiError) {
-        throw err;
-      }
-
       throw new DBInternalServerError(
         "Internal server error while deleting category",
       );
