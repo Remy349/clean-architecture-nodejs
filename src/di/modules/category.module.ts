@@ -16,6 +16,7 @@ export const createCategoryModule = () => {
   categoryModule
     .bind(DI_SYMBOLS.ICategoryRepository)
     .toClass(CategoryRepository);
+
   // Use Cases
   categoryModule
     .bind(DI_SYMBOLS.IGetAllCategoriesUseCase)
@@ -37,6 +38,7 @@ export const createCategoryModule = () => {
     .toHigherOrderFunction(deleteCategoryUseCase, [
       DI_SYMBOLS.ICategoryRepository,
     ]);
+
   // Controllers
   categoryModule
     .bind(DI_SYMBOLS.IGetAllCategoriesController)
