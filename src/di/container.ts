@@ -8,8 +8,15 @@ const container = createContainer();
 container.load(Symbol("UserModule"), createUserModule());
 container.load(Symbol("CategoryModule"), createCategoryModule());
 
-export function getInjection<K extends keyof typeof DI_SYMBOLS>(
-  symbol: K,
-): DI_RETURN_TYPES[K] {
-  return container.get(DI_SYMBOLS[symbol]);
+export function getInjection<
+  K extends keyof DI_RETURN_TYPES,
+  P extends keyof DI_RETURN_TYPES[K],
+>(moduleKey: K, symbolKey: P): DI_RETURN_TYPES[K][P] {
+  const moduleSymbols = DI_SYMBOLS[moduleKey] as Record<
+    keyof DI_RETURN_TYPES[K],
+    symbol
+  >;
+  const symbol = moduleSymbols[symbolKey] as symbol;
+
+  return container.get<DI_RETURN_TYPES[K][P]>(symbol);
 }

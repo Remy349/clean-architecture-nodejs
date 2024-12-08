@@ -8,27 +8,32 @@ import { getUserByIdController } from "@/interface-adapters/controllers/user/get
 
 export const createUserModule = () => {
   const userModule = createModule();
+
   // Repository
-  userModule.bind(DI_SYMBOLS.IUserRepository).toClass(UserRepository);
+  userModule.bind(DI_SYMBOLS.users.IUserRepository).toClass(UserRepository);
 
   // Use cases
   userModule
-    .bind(DI_SYMBOLS.IGetAllUsersUseCase)
-    .toHigherOrderFunction(getAllUsersUseCase, [DI_SYMBOLS.IUserRepository]);
+    .bind(DI_SYMBOLS.users.IGetAllUsersUseCase)
+    .toHigherOrderFunction(getAllUsersUseCase, [
+      DI_SYMBOLS.users.IUserRepository,
+    ]);
   userModule
-    .bind(DI_SYMBOLS.IGetUserByIdUseCase)
-    .toHigherOrderFunction(getUserByIdUseCase, [DI_SYMBOLS.IUserRepository]);
+    .bind(DI_SYMBOLS.users.IGetUserByIdUseCase)
+    .toHigherOrderFunction(getUserByIdUseCase, [
+      DI_SYMBOLS.users.IUserRepository,
+    ]);
 
   // Controllers
   userModule
-    .bind(DI_SYMBOLS.IGetAllUsersController)
+    .bind(DI_SYMBOLS.users.IGetAllUsersController)
     .toHigherOrderFunction(getAllUsersController, [
-      DI_SYMBOLS.IGetAllUsersUseCase,
+      DI_SYMBOLS.users.IGetAllUsersUseCase,
     ]);
   userModule
-    .bind(DI_SYMBOLS.IGetUserByIdController)
+    .bind(DI_SYMBOLS.users.IGetUserByIdController)
     .toHigherOrderFunction(getUserByIdController, [
-      DI_SYMBOLS.IGetUserByIdUseCase,
+      DI_SYMBOLS.users.IGetUserByIdUseCase,
     ]);
 
   return userModule;

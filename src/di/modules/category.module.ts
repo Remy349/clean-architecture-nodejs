@@ -12,53 +12,54 @@ import { deleteCategoryController } from "@/interface-adapters/controllers/categ
 
 export const createCategoryModule = () => {
   const categoryModule = createModule();
+
   // Repository
   categoryModule
-    .bind(DI_SYMBOLS.ICategoryRepository)
+    .bind(DI_SYMBOLS.categories.ICategoryRepository)
     .toClass(CategoryRepository);
 
   // Use Cases
   categoryModule
-    .bind(DI_SYMBOLS.IGetAllCategoriesUseCase)
+    .bind(DI_SYMBOLS.categories.IGetAllCategoriesUseCase)
     .toHigherOrderFunction(getAllCategoriesUseCase, [
-      DI_SYMBOLS.ICategoryRepository,
+      DI_SYMBOLS.categories.ICategoryRepository,
     ]);
   categoryModule
-    .bind(DI_SYMBOLS.IGetCategoryByIdUseCase)
+    .bind(DI_SYMBOLS.categories.IGetCategoryByIdUseCase)
     .toHigherOrderFunction(getCategoryByIdUseCase, [
-      DI_SYMBOLS.ICategoryRepository,
+      DI_SYMBOLS.categories.ICategoryRepository,
     ]);
   categoryModule
-    .bind(DI_SYMBOLS.ICreateCategoryUseCase)
+    .bind(DI_SYMBOLS.categories.ICreateCategoryUseCase)
     .toHigherOrderFunction(createCategoryUseCase, [
-      DI_SYMBOLS.ICategoryRepository,
+      DI_SYMBOLS.categories.ICategoryRepository,
     ]);
   categoryModule
-    .bind(DI_SYMBOLS.IDeleteCategoryUseCase)
+    .bind(DI_SYMBOLS.categories.IDeleteCategoryUseCase)
     .toHigherOrderFunction(deleteCategoryUseCase, [
-      DI_SYMBOLS.ICategoryRepository,
+      DI_SYMBOLS.categories.ICategoryRepository,
     ]);
 
   // Controllers
   categoryModule
-    .bind(DI_SYMBOLS.IGetAllCategoriesController)
+    .bind(DI_SYMBOLS.categories.IGetAllCategoriesController)
     .toHigherOrderFunction(getAllCategoriesController, [
-      DI_SYMBOLS.IGetAllCategoriesUseCase,
+      DI_SYMBOLS.categories.IGetAllCategoriesUseCase,
     ]);
   categoryModule
-    .bind(DI_SYMBOLS.IGetCategoryByIdController)
+    .bind(DI_SYMBOLS.categories.IGetCategoryByIdController)
     .toHigherOrderFunction(getCategoryByIdController, [
-      DI_SYMBOLS.IGetCategoryByIdUseCase,
+      DI_SYMBOLS.categories.IGetCategoryByIdUseCase,
     ]);
   categoryModule
-    .bind(DI_SYMBOLS.ICreateCategoryController)
+    .bind(DI_SYMBOLS.categories.ICreateCategoryController)
     .toHigherOrderFunction(createCategoryController, [
-      DI_SYMBOLS.ICreateCategoryUseCase,
+      DI_SYMBOLS.categories.ICreateCategoryUseCase,
     ]);
   categoryModule
-    .bind(DI_SYMBOLS.IDeleteCategoryController)
+    .bind(DI_SYMBOLS.categories.IDeleteCategoryController)
     .toHigherOrderFunction(deleteCategoryController, [
-      DI_SYMBOLS.IDeleteCategoryUseCase,
+      DI_SYMBOLS.categories.IDeleteCategoryUseCase,
     ]);
 
   return categoryModule;
