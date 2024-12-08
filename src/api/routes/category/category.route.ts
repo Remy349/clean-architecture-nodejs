@@ -8,6 +8,7 @@ export const getAllCategories = async (
 ) => {
   try {
     const getAllCategoriesController = getInjection(
+      "categories",
       "IGetAllCategoriesController",
     );
     const categories = await getAllCategoriesController();
@@ -27,6 +28,7 @@ export const getCategoryById = async (
     const categoryId = Number(req.params.id);
 
     const getCategoryByIdController = getInjection(
+      "categories",
       "IGetCategoryByIdController",
     );
     const category = await getCategoryByIdController(categoryId);
@@ -45,7 +47,10 @@ export const createCategory = async (
   try {
     const input = req.body;
 
-    const createCategoryController = getInjection("ICreateCategoryController");
+    const createCategoryController = getInjection(
+      "categories",
+      "ICreateCategoryController",
+    );
     const category = await createCategoryController(input);
 
     res.status(201).json(category);
@@ -62,7 +67,10 @@ export const deleteCategory = async (
   try {
     const categoryId = Number(req.params.id);
 
-    const deleteCategoryController = getInjection("IDeleteCategoryController");
+    const deleteCategoryController = getInjection(
+      "categories",
+      "IDeleteCategoryController",
+    );
     await deleteCategoryController(categoryId);
 
     res.status(200).json({ message: "Category successfully deleted" });

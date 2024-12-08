@@ -7,7 +7,10 @@ export const getAllUsers = async (
   next: NextFunction,
 ) => {
   try {
-    const getAllUsersController = getInjection("IGetAllUsersController");
+    const getAllUsersController = getInjection(
+      "users",
+      "IGetAllUsersController",
+    );
     const users = await getAllUsersController();
 
     res.status(200).json(users);
@@ -24,7 +27,10 @@ export const getUserById = async (
   try {
     const userId = Number(req.params.id);
 
-    const getUserByIdController = getInjection("IGetUserByIdController");
+    const getUserByIdController = getInjection(
+      "users",
+      "IGetUserByIdController",
+    );
     const user = await getUserByIdController(userId);
 
     res.status(200).json(user);
