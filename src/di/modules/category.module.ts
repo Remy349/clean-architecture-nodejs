@@ -13,12 +13,12 @@ import { deleteCategoryController } from "@/interface-adapters/controllers/categ
 export const createCategoryModule = () => {
   const categoryModule = createModule();
 
-  // Repository
+  // REPOSITORY
   categoryModule
     .bind(DI_SYMBOLS.categories.ICategoryRepository)
     .toClass(CategoryRepository);
 
-  // Use Cases
+  // USE CASES
   categoryModule
     .bind(DI_SYMBOLS.categories.IGetAllCategoriesUseCase)
     .toHigherOrderFunction(getAllCategoriesUseCase, [
@@ -40,7 +40,7 @@ export const createCategoryModule = () => {
       DI_SYMBOLS.categories.ICategoryRepository,
     ]);
 
-  // Controllers
+  // CONTROLLERS
   categoryModule
     .bind(DI_SYMBOLS.categories.IGetAllCategoriesController)
     .toHigherOrderFunction(getAllCategoriesController, [

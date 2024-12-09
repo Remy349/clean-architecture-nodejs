@@ -11,10 +11,10 @@ import { deleteUserController } from "@/interface-adapters/controllers/user/dele
 export const createUserModule = () => {
   const userModule = createModule();
 
-  // Repository
+  // REPOSITORY
   userModule.bind(DI_SYMBOLS.users.IUserRepository).toClass(UserRepository);
 
-  // Use cases
+  // USE CASES
   userModule
     .bind(DI_SYMBOLS.users.IGetAllUsersUseCase)
     .toHigherOrderFunction(getAllUsersUseCase, [
@@ -31,7 +31,7 @@ export const createUserModule = () => {
       DI_SYMBOLS.users.IUserRepository,
     ]);
 
-  // Controllers
+  // CONTROLLERS
   userModule
     .bind(DI_SYMBOLS.users.IGetAllUsersController)
     .toHigherOrderFunction(getAllUsersController, [
