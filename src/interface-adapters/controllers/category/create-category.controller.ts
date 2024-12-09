@@ -1,6 +1,6 @@
 import { ICreateCategoryUseCase } from "@/application/use-cases/category/create-category.use-case";
 import { InputParseError } from "@/entities/errors/parse.error";
-import { Category, CreateCategory } from "@/entities/models/category.model";
+import { Category } from "@/entities/models/category.model";
 import { z } from "zod";
 
 const presenter = (category: Category) => {
@@ -12,7 +12,7 @@ const presenter = (category: Category) => {
 };
 
 const inputSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1, "Name is required"),
 });
 
 export type ICreateCategoryController = ReturnType<
@@ -21,7 +21,9 @@ export type ICreateCategoryController = ReturnType<
 
 export const createCategoryController =
   (createCategoryUseCase: ICreateCategoryUseCase) =>
-  async (input: CreateCategory): Promise<ReturnType<typeof presenter>> => {
+  async (
+    input: z.infer<typeof inputSchema>,
+  ): Promise<ReturnType<typeof presenter>> => {
     const { data, error: inputParseError } = inputSchema.safeParse(input);
 
     if (inputParseError) {
