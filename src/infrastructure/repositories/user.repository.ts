@@ -3,6 +3,7 @@ import PrismaSingleton from "@/db/prisma";
 import { DBInternalServerError } from "@/entities/errors/database.error";
 import { CreateUser, User } from "@/entities/models/user.model";
 import { PrismaClient } from "@prisma/client";
+import { hash } from "bcryptjs";
 
 export class UserRepository implements IUserRepository {
   private db: PrismaClient;
@@ -17,7 +18,7 @@ export class UserRepository implements IUserRepository {
     } catch (err) {
       console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
       throw new DBInternalServerError(
-        "Interal server error while fetching users",
+        "Internal server error while fetching users",
       );
     }
   }
@@ -32,7 +33,7 @@ export class UserRepository implements IUserRepository {
     } catch (err) {
       console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
       throw new DBInternalServerError(
-        "Interal server error while fetching user",
+        "Internal server error while fetching user",
       );
     }
   }
@@ -47,13 +48,28 @@ export class UserRepository implements IUserRepository {
     } catch (err) {
       console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
       throw new DBInternalServerError(
-        "Interal server error while fetching user",
+        "Internal server error while fetching user",
       );
     }
   }
 
   async create(data: CreateUser): Promise<User> {
-    throw new Error("Implement Logic");
+    try {
+      const hashPassword = await hash(data.password, 8);
+
+      return await this.db.user.create({
+        data: {
+          username: data.username,
+          password: hashPassword,
+          role: data.role,
+        },
+      });
+    } catch (err) {
+      console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
+      throw new DBInternalServerError(
+        "Internal server error while creating user",
+      );
+    }
   }
 
   async delete(userId: number): Promise<void> {
@@ -64,7 +80,7 @@ export class UserRepository implements IUserRepository {
     } catch (err) {
       console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
       throw new DBInternalServerError(
-        "Interal server error while deleting user",
+        "Internal server error while deleting user",
       );
     }
   }
