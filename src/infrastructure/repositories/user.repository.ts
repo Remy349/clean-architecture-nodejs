@@ -57,6 +57,15 @@ export class UserRepository implements IUserRepository {
   }
 
   async delete(userId: number): Promise<void> {
-    throw new Error("Implement Logic");
+    try {
+      await this.db.user.delete({
+        where: { id: userId },
+      });
+    } catch (err) {
+      console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
+      throw new DBInternalServerError(
+        "Interal server error while deleting user",
+      );
+    }
   }
 }
