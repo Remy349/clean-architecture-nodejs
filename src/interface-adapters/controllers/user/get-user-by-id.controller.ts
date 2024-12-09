@@ -6,7 +6,6 @@ const presenter = (user: User | null) => {
     ? {
         id: user.id,
         username: user.username,
-        password: user.password,
         role: user.role,
         createdAt: user.createdAt,
       }

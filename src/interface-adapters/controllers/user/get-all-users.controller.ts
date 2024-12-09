@@ -5,7 +5,6 @@ const presenter = (users: User[]) => {
   return users.map((user) => ({
     id: user.id,
     username: user.username,
-    password: user.password,
     role: user.role,
     createdAt: user.createdAt,
   }));
