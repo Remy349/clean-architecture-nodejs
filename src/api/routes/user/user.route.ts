@@ -38,3 +38,20 @@ export const getUserById = async (
     next(err);
   }
 };
+
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = Number(req.params.id);
+
+    const deleteUserController = getInjection("users", "IDeleteUserController");
+    await deleteUserController(userId);
+
+    res.status(200).json({ message: "User successfully deleted" });
+  } catch (err) {
+    next(err);
+  }
+};
