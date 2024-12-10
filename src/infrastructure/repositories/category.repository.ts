@@ -9,15 +9,15 @@ import { CreateCategory, Category } from "@/entities/models/category.model";
 import { PrismaClient } from "@prisma/client";
 
 export class CategoryRepository implements ICategoryRepository {
-  private db: PrismaClient;
+  private _db: PrismaClient;
 
   constructor() {
-    this.db = PrismaSingleton.getInstance();
+    this._db = PrismaSingleton.getInstance();
   }
 
   async getAll(): Promise<Category[]> {
     try {
-      const categories = await this.db.category.findMany();
+      const categories = await this._db.category.findMany();
 
       return categories;
     } catch (err) {
@@ -30,7 +30,7 @@ export class CategoryRepository implements ICategoryRepository {
 
   async getById(categoryId: number): Promise<Category | null> {
     try {
-      const category = await this.db.category.findFirst({
+      const category = await this._db.category.findFirst({
         where: { id: categoryId },
       });
 
@@ -45,7 +45,7 @@ export class CategoryRepository implements ICategoryRepository {
 
   async create(data: CreateCategory): Promise<Category> {
     try {
-      const categoryByName = await this.db.category.findFirst({
+      const categoryByName = await this._db.category.findFirst({
         where: {
           name: data.name,
         },
@@ -55,7 +55,7 @@ export class CategoryRepository implements ICategoryRepository {
         throw new DBConflictError("Category already created");
       }
 
-      const newCategory = await this.db.category.create({
+      const newCategory = await this._db.category.create({
         data,
       });
 
@@ -75,7 +75,7 @@ export class CategoryRepository implements ICategoryRepository {
 
   async delete(categoryId: number): Promise<void> {
     try {
-      await this.db.category.delete({
+      await this._db.category.delete({
         where: { id: categoryId },
       });
     } catch (err) {

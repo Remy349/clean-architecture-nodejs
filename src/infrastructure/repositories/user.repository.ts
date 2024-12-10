@@ -6,15 +6,15 @@ import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 
 export class UserRepository implements IUserRepository {
-  private db: PrismaClient;
+  private _db: PrismaClient;
 
   constructor() {
-    this.db = PrismaSingleton.getInstance();
+    this._db = PrismaSingleton.getInstance();
   }
 
   async getAll(): Promise<User[]> {
     try {
-      return await this.db.user.findMany();
+      return await this._db.user.findMany();
     } catch (err) {
       console.error("===> ERROR FROM REPOSITORY IMPL - ", err);
       throw new DBInternalServerError(
@@ -25,7 +25,7 @@ export class UserRepository implements IUserRepository {
 
   async getById(userId: number): Promise<User | null> {
     try {
-      const user = await this.db.user.findFirst({
+      const user = await this._db.user.findFirst({
         where: { id: userId },
       });
 
@@ -40,7 +40,7 @@ export class UserRepository implements IUserRepository {
 
   async getByUsername(username: string): Promise<User | null> {
     try {
-      const user = await this.db.user.findFirst({
+      const user = await this._db.user.findFirst({
         where: { username },
       });
 
@@ -57,7 +57,7 @@ export class UserRepository implements IUserRepository {
     try {
       const hashPassword = await hash(data.password, 8);
 
-      return await this.db.user.create({
+      return await this._db.user.create({
         data: {
           username: data.username,
           password: hashPassword,
@@ -74,7 +74,7 @@ export class UserRepository implements IUserRepository {
 
   async delete(userId: number): Promise<void> {
     try {
-      await this.db.user.delete({
+      await this._db.user.delete({
         where: { id: userId },
       });
     } catch (err) {
