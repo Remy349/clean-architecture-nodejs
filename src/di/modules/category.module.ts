@@ -9,14 +9,21 @@ import { getCategoryByIdUseCase } from "@/application/use-cases/category/get-cat
 import { deleteCategoryUseCase } from "@/application/use-cases/category/delete-category.use-case";
 import { getCategoryByIdController } from "@/interface-adapters/controllers/category/get-category-by-id.controller";
 import { deleteCategoryController } from "@/interface-adapters/controllers/category/delete-category.controller";
+import { CategoryRepositoryMock } from "@/infrastructure/repositories/category.repository.mock";
 
 export const createCategoryModule = () => {
   const categoryModule = createModule();
 
   // REPOSITORY
-  categoryModule
-    .bind(DI_SYMBOLS.categories.ICategoryRepository)
-    .toClass(CategoryRepository);
+  if (process.env.NODE_ENV === "test") {
+    categoryModule
+      .bind(DI_SYMBOLS.categories.ICategoryRepository)
+      .toClass(CategoryRepositoryMock);
+  } else {
+    categoryModule
+      .bind(DI_SYMBOLS.categories.ICategoryRepository)
+      .toClass(CategoryRepository);
+  }
 
   // USE CASES
   categoryModule
