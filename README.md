@@ -1,6 +1,6 @@
 # Clean Architecture with NodeJS and TypeScript
 
-Project developed in order to implement clean architecture and dependency injection. Las tecnologias que se usaron para el desarrollo fueron:
+Project developed in order to implement clean architecture and dependency injection. The technologies used for the developmengt:
 
 - NodeJS
 - ExpressJS
