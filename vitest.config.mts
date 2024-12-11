@@ -8,6 +8,12 @@ export default defineConfig({
     },
   },
   test: {
+    coverage: {
+      include: ["src/application", "src/interface-adapters"],
+      provider: "istanbul",
+      reportsDirectory: "./src/tests/coverage",
+      reporter: ["html", "text"],
+    },
     environment: "node",
   },
 });
